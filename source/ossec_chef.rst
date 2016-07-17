@@ -252,6 +252,19 @@ OSSEC uses the term `agent` instead of client. The agent recipe includes the `wa
 
 Sets up a system to be an OSSEC server. This recipe will search for all nodes that have an `ossec` attribute and add them as an agent to register with the given server running ossec-authd. To allow registration with a new server after changing `agent_server_ip`, delete the client.keys file and rerun the recipe..
 
+###wazuh_api
+
+OSSEC Wazuh RESTful API provides a new mechanism to manage OSSEC Wazuh, more information http://documentation.wazuh.com/en/latest/ossec_api.html.
+Create a data bag ```wazuh_secrets``` with a item ```api```
+
+::
+
+  {
+    "id": "api",
+    "htpasswd_user": "",
+    "htpasswd_passcode": ""
+  }
+
 To manage additional agents on the server that don't run chef, or for agentless OSSEC configuration (for example, routers), add a new node for them and create the `node['ossec']['agentless']` attribute as true. For example if we have a router named gw01.example.com with the IP `192.168.100.1`:
 
 ::
