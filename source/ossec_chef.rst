@@ -255,7 +255,7 @@ Sets up a system to be an OSSEC server. This recipe will search for all nodes th
 ###wazuh_api
 
 OSSEC Wazuh RESTful API provides a new mechanism to manage OSSEC Wazuh, more information http://documentation.wazuh.com/en/latest/ossec_api.html.
-Create a data bag ```wazuh_secrets``` with a item ```api```
+Create a encrypted data bag ```wazuh_secrets``` with a item ```api```
 
 ::
 
