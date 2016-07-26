@@ -48,14 +48,6 @@ For Fedora (versions 21, 22 or 23): ::
 OSSEC manager installation
 --------------------------
 
-To install the OSSEC manager using Yum packages manager, run the following command: ::
-
-   $ yum install wazuh-manager
-
-On Fedora 23, to install the OSSEC manager with DNF packages manager, run the following command: ::
-
-   $ dnf install wazuh-manager
-
 If you like to install OSSEC manager version 2.8.3 manager, run the following command: ::
 
   $ yum install ossec-hids
@@ -67,14 +59,6 @@ On Fedora 23, to install the OSSEC manager with DNF packages manager, run the fo
 OSSEC agent installation
 ------------------------
 
-To install the OSSEC manager using Yum packages manager, run the following command: ::
-
-   $ yum install wazuh-agent
-
-On Fedora 23, to install the OSSEC manager with DNF packages manager, run the following command: ::
-
-   $ dnf install wazuh-agent
-
 If you like to install OSSEC manager version 2.8.3 manager, run the following command: ::
 
   $ yum install ossec-hids-agent
@@ -84,4 +68,4 @@ On Fedora 23, to install the OSSEC manager with DNF packages manager, run the fo
   $ dnf install ossec-hids-agent
 
 
-.. note:: If it is your first installation from our repository, you will need to accept our repository GPG key when prompted during the installation. This key can be found at: `http://ossec.wazuh.com/key/RPM-GPG-KEY-OSSEC <http://ossec.wazuh.com/key/RPM-GPG-KEY-OSSEC>`_ also if you don't have the EPEL-RELEASE repository, these packages will install to resolve dependences.
+.. note:: If it is your first installation from our repository, you will need to accept our repository GPG key when prompted during the installation. This key can be found at: `http://ossec.wazuh.com/key/RPM-GPG-KEY-OSSEC <http://ossec.wazuh.com/key/RPM-GPG-KEY-OSSEC>`_ 
