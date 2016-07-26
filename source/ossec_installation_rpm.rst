@@ -50,21 +50,21 @@ OSSEC manager installation
 
 To install the OSSEC manager using Yum packages manager, run the following command: ::
 
-   $ yum install ossec-hids
+   $ yum install wazuh-manager
 
 On Fedora 23, to install the OSSEC manager with DNF packages manager, run the following command: ::
 
-   $ dnf install ossec-hids
+   $ dnf install wazuh-manager
 
 OSSEC agent installation
 ------------------------
 
 To install the OSSEC agent using the Yum packages manger, run the following command: ::
 
-   $ yum install ossec-hids-agent
+   $ yum install wazuh-agent
 
 On Fedora 23, to install the OSSEC agent with the DNF packages manager, run the following command: ::
 
-   $ dnf install ossec-hids-agent
+   $ dnf install wazuh-agent
 
 .. note:: If it is your first installation from our repository, you will need to accept our repository GPG key when prompted during the installation. This key can be found at: `http://ossec.wazuh.com/key/RPM-GPG-KEY-OSSEC <http://ossec.wazuh.com/key/RPM-GPG-KEY-OSSEC>`_
