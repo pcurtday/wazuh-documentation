@@ -13,6 +13,7 @@ The API will be installed in the **same server that OSSEC Manager**. So, before 
 
  - A non-root user account with sudo privileges.
  - Wazuh HIDS Manager installed, :ref:`see installation <wazuh_installation>`.
+ - Wazuh framework, :ref:`see installation *ToDo*<wazuh_installation>`.
 
 
 Required packages
@@ -38,32 +39,35 @@ Red Hat, CentOS and Fedora: ::
  $ curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
  $ yum -y install nodejs
 
-Python
+Other packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-The API needs **Python 2.6** or newer to perform some tasks.
-
-Also, you need to install the python package *xmljson*: ::
-
- $ sudo pip install xmljson
-
-In case you need the **pip** tool, you can install it following these steps:
+You will need *htpasswd* to configure your user/password and *unzip* in case you run the script to automatically install the API:
 
 Debian and Ubuntu based Linux distributions: ::
 
- $ sudo apt-get install python-pip
+  sudo apt-get install -y unzip wget apache2-utils
 
 Red Hat, CentOS and Fedora: ::
 
- $ sudo yum install python-pip
+  yum install -y unzip wget httpd-tools
 
 
 RESTful API
 --------------------
+Our server is ready to install the API. There are two ways to install it: manually or automatically.
 
-Our server is ready to install the API. Execute the next commands to download the API and copy it to */var/ossec/api*: ::
+Automatically
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This option is the most confortable and also it allows to configure the API easily: ::
+
+  $ wget https://raw.githubusercontent.com/wazuh/wazuh-API/development/scripts/install_api.sh && bash ./install_api.sh
+
+Manually
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Execute the next commands to download the API and copy it to */var/ossec/api*: ::
 
  $ cd ~
- $ wget https://github.com/wazuh/wazuh-API/archive/v1.2.tar.gz -O wazuh-API-1.2.tar.gz
+ $ wget https://github.com/wazuh/wazuh-API/archive/v1.2.1.tar.gz -O wazuh-API-1.2.1.tar.gz
  $ tar -xvf wazuh-API-*.tar.gz
  $ sudo mkdir -p /var/ossec/api && sudo cp -r wazuh-API-*/* /var/ossec/api
 
@@ -73,4 +77,4 @@ Now, we need to install the NodeJS modules required by the API: ::
  $ cd /var/ossec/api
  $ npm install --only=production
 
-You now have the RESTFul API installed on your server!. Next step is to configure it.
+You now have the RESTFul API installed on your server. If you installed it manually, check out how to configure it.

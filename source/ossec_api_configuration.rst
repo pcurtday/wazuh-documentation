@@ -8,7 +8,7 @@ The API will run on port 55000/tcp by default, encrypted by HTTPS and protected 
 Configuration file
 ---------------------
 
-You can configure some parameters using the file ``/var/ossec/api/config.js``: ::
+You can configure some parameters using the file ``/var/ossec/api/configuration/config.js``: ::
 
     // Port
     // TCP Port used by the API.
@@ -55,7 +55,7 @@ On Red Hat, CentOS and Fedora: ::
 
 Then, run htpasswd with your desired username: ::
 
- $ cd /var/ossec/api/ssl
+ $ cd /var/ossec/api/configuration/auth
  $ sudo htpasswd -c htpasswd myUsername
 
 SSL Certificate
@@ -65,7 +65,7 @@ At this point, you will create certificates to use the API, in case you prefer t
 
 Follow the next steps to generate them (Openssl package is required): ::
 
- $ cd /var/ossec/api/ssl
+ $ cd /var/ossec/api/configuration/ssl
  $ sudo openssl genrsa -des3 -out server.key 1024
  $ sudo openssl req -new -key server.key -out server.csr
 
