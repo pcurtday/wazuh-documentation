@@ -17,3 +17,4 @@ Table of contents
    wazuh_kibana
    ossec_splunk
    wazuh_modules
+   wazuh_framework
