@@ -495,29 +495,8 @@ Output:
 ::
 
     error data
-    ----- --------                                                                           
+    ----- --------
     0     @{syscheckTime=Wed Feb 24 09:55:04 2016; syscheckEndTime=Wed Feb 24 10:00:42 2016}
 
 
 Full example in ``wazuh-API/examples/api-client.ps1``.
-
-Versioning
----------------------------------
-
-We want to keep our API as backward compatible as possible. So, the client can specify what API version wants to use. The version is determined by the incoming client request, and may either be based on the request URL, or based on the request headers. If you don't specify the version, you will use the lastest version available. Right now, the API just has a version available: **v1.2**.
-
-Below it is detailed how to use the API Versioning.
-
-
-URL Versioning
-^^^^^^^^^^^^^^^^^^
-API version is specified into the URL: ::
-
-    GET https://IP:55000/v1.2/agents
-
-Header Versioning
-^^^^^^^^^^^^^^^^^^
-The normal URL but add the header **api-version**: ::
-
-    GET https://IP:55000/agents
-    api-version: v1.2

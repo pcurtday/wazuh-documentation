@@ -3,42 +3,35 @@
 Configuration
 ======================
 
-The API will run on port 55000/tcp by default, encrypted by HTTPS and protected with authentication. Below, we explain how to configure these options and how to run the API.
+The API will run on port 55000/tcp by default and protected with authentication. Below, we explain how to configure these options and how to run the API.
 
 Configuration file
 ---------------------
 
 You can configure some parameters using the file ``/var/ossec/api/configuration/config.js``: ::
 
-    // Port
+    // Path
+    config.ossec_path = "/var/ossec";
     // TCP Port used by the API.
     config.port = "55000";
-
-    // Security
-    // Use HTTP protocol over TLS/SSL
-    config.https = "yes";
-
-    // Use HTTP authentication
+    // Use HTTP protocol over TLS/SSL. Values: yes, no.
+    config.https = "no";
+    // Use HTTP authentication. Values: yes, no.
     config.basic_auth = "yes";
-
-    // In case the API run behind a proxy server, turn to "yes" this feature.
+    //In case the API run behind a proxy server, turn to "yes" this feature. Values: yes, no.
     config.BehindProxyServer = "no";
 
-    // Cross-origin resource sharing
-    config.cors = "yes";
+Automatic configuration
+-------------------------
 
-    // Paths
-    config.ossec_path = "/var/ossec";
-    config.log_path = "/var/ossec/logs/api.log";
-    config.api_path = __dirname;
+Run the script ``/var/ossec/api/scripts/configure_api.sh`` in order to configure the basic settings. 
 
-    // Logs
-    // Values for API log: disabled, info, warning, error, debug (each level includes the previous level).
-    config.logs = "info";
-    config.logs_tag = "WazuhAPI";
+
+Manual configuration
+-------------------------
 
 Basic Authentication
-----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 By default you can access by typing user "foo" and password "bar". We recommend you to generate new credentials. This can be done very easily, doing the following steps:
 
@@ -46,7 +39,6 @@ At first, please make sure that you have ``htpasswd`` tool installed.
 
 On Debian and Ubuntu based Linux distributions: ::
 
- $ sudo apt-get update
  $ sudo apt-get install apache2-utils
 
 On Red Hat, CentOS and Fedora: ::
@@ -59,7 +51,7 @@ Then, run htpasswd with your desired username: ::
  $ sudo htpasswd -c htpasswd myUsername
 
 SSL Certificate
-----------------------------------------
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 At this point, you will create certificates to use the API, in case you prefer to use the out-of-the-box certificates, skip this section.
 
