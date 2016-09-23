@@ -25,14 +25,14 @@ Request List
 	* GET /agents/:agent_id/key  (`Get agent key`_)
 	* GET /agents/summary  (`Get agents summary`_)
 	* POST /agents/:agent_id  (`Add agent`_)
-	* PUT /agents/:agent_id  (`Restart an agent`_)
+	* PUT /agents/:agent_id/restart  (`Restart an agent`_)
 	* PUT /agents/:agent_name  (`Add agent (quick method)`_)
 	* PUT /agents/restart  (`Restart all agents`_)
 
 `Decoders`_
 	* GET /decoders  (`Get all decoders`_)
 	* GET /decoders/:decoder_name  (`Get decoders by name`_)
-	* GET /decoders/files  (`Get all decoders files.`_)
+	* GET /decoders/files  (`Get all decoders files`_)
 	* GET /decoders/parents  (`Get all parent decoders`_)
 
 `Manager`_
@@ -44,13 +44,6 @@ Request List
 	* GET /manager/stats/hourly  (`Get manager stats by hour`_)
 	* GET /manager/stats/weekly  (`Get manager stats by week`_)
 	* GET /manager/status  (`Get manager status`_)
-	* GET /manager/update-ruleset/backups  (`Get ruleset backups`_)
-	* PUT /manager/configuration/test  (`Test manager configuration`_)
-	* PUT /manager/restart  (`Restart manager`_)
-	* PUT /manager/start  (`Start manager`_)
-	* PUT /manager/stop  (`Stop manager`_)
-	* PUT /manager/update-ruleset  (`Update ruleset`_)
-	* PUT /manager/update-ruleset/backups/:id  (`Restore rulset backup`_)
 
 `Rootcheck`_
 	* DELETE /rootcheck  (`Clear rootcheck database`_)
@@ -72,7 +65,7 @@ Request List
 `Syscheck`_
 	* DELETE /syscheck  (`Clear syscheck database`_)
 	* DELETE /syscheck/:agent_id  (`Clear syscheck database of an agent`_)
-	* GET /syscheck/:agent_id/files  (`Get syscheck files`_)
+	* GET /syscheck/:agent_id  (`Get syscheck files`_)
 	* GET /syscheck/:agent_id/last_scan  (`Get last syscheck scan`_)
 	* PUT /syscheck  (`Run syscheck scan in all agents`_)
 	* PUT /syscheck/:agent_id  (`Run syscheck scan in an agent`_)
@@ -120,7 +113,7 @@ Add a new agent.
 	   "error": 0,
 	   "data": "001"
 	}
-
+	
 
 Add agent (quick method)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -152,7 +145,7 @@ Adds a new agent with name :agent_name. This agent will use ANY as IP.
 	   "error": 0,
 	   "data": "002"
 	}
-
+	
 
 
 Delete
@@ -160,7 +153,7 @@ Delete
 
 Delete an agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Removes an agent. Internally use manage_agents with option -r <id>. You must restart OSSEC after removing an agent.
+Removes an agent. You must restart OSSEC after removing an agent.
 
 **Request**:
 
@@ -188,7 +181,7 @@ Removes an agent. Internally use manage_agents with option -r <id>. You must res
 	   "error": 0,
 	   "data": "Agent removed"
 	}
-
+	
 
 
 Info
@@ -215,13 +208,13 @@ Returns a summary of the available agents.
 	{
 	   "error": 0,
 	   "data": {
-	      "active": 1,
-	      "total": 2,
-	      "disconnected": 0,
-	      "neverConnected": 1
+	      "Active": 1,
+	      "Never connected": 1,
+	      "Total": 2,
+	      "Disconnected": 0
 	   }
 	}
-
+	
 
 Get all agents
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -269,21 +262,21 @@ Returns a list with the available agents.
 	      "totalItems": 2,
 	      "items": [
 	         {
-	            "status": "Active",
-	            "ip": "127.0.0.1",
-	            "id": "000",
-	            "name": "LinMV"
-	         },
-	         {
 	            "status": "Never connected",
 	            "ip": "10.0.0.9",
 	            "id": "001",
 	            "name": "NewHost"
+	         },
+	         {
+	            "status": "Active",
+	            "ip": "127.0.0.1",
+	            "id": "000",
+	            "name": "ip-10-0-0-20"
 	         }
 	      ]
 	   }
 	}
-
+	
 
 Get an agent
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -315,19 +308,16 @@ Returns the information of an agent.
 	   "error": 0,
 	   "data": {
 	      "status": "Active",
+	      "name": "ip-10-0-0-20",
 	      "ip": "127.0.0.1",
-	      "syscheckEndTime": "Fri Jul 15 11:06:12 2016",
-	      "id": "000",
-	      "name": "LinMV",
-	      "rootcheckEndTime": "Fri Jul 15 11:05:34 2016",
-	      "version": "OSSEC HIDS v2.8",
-	      "syscheckTime": "Fri Jul 15 11:05:40 2016",
-	      "lastKeepAlive": "Not available",
-	      "os": "Linux LinMV 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt11-1 (2015-05-24) x86_64",
-	      "rootcheckTime": "Fri Jul 15 11:05:40 2016"
+	      "dateAdd": "2016-09-22 16:15:12",
+	      "version": "OSSEC Wazuh v1.2",
+	      "lastKeepAlive": "9999-12-31 23:59:59",
+	      "os": "Linux ip-10-0-0-20 3.16.0-4-amd64 #1 SMP Debian 3.16.7-ckt20-1+deb8u3 (2016-01-17) x86_64",
+	      "id": "000"
 	   }
 	}
-
+	
 
 
 Key
@@ -361,9 +351,9 @@ Returns the key of an agent.
 
 	{
 	   "error": 0,
-	   "data": "MDAxIE5ld0hvc3QgKG51bGwpIDViM2U3N2UzMDBhNDZhMWI3NDAwZTUxOWE3YWQ0ZWY3Y2Q0NTg4NGJmMGNjNjYxZmVmODJmNzQ1MGY2MGVhYjQ="
+	   "data": "MDAxIE5ld0hvc3QgMTAuMC4wLjkgMGZhOTBlMGMyNmJkZWM4ODJiNWY4NWUzNmY4ZTI4ODNkMWU3NTZlMzYxYTRiYWZhMGY1ZmU0YjgwMDBjMTI2MQ=="
 	}
-
+	
 
 
 Restart
@@ -388,7 +378,7 @@ Restarts all agents.
 ::
 
 	{
-	    "data": "Restarting all agents",
+	    "data": "Restarting all agents", 
 	    "error": 0
 	}
 
@@ -400,7 +390,7 @@ Restarts the agent.
 
 ``PUT`` ::
 
-	/agents/:agent_id
+	/agents/:agent_id/restart
 
 **Parameters:**
 
@@ -419,7 +409,7 @@ Restarts the agent.
 ::
 
 	{
-	    "data": "Restarting agent",
+	    "data": "Restarting agent", 
 	    "error": 0
 	}
 
@@ -467,7 +457,7 @@ Returns all decoders included in ossec.conf.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 342,
+	      "totalItems": 356,
 	      "items": [
 	         {
 	            "position": 0,
@@ -476,7 +466,7 @@ Returns all decoders included in ossec.conf.
 	               "order": "action, status, srcip, id, extra_data",
 	               "prematch": "^\\w\\w\\w \\w+\\s+\\d+ \\d\\d:\\d\\d:\\d\\d \\w+ \\d+ /\\S+/active-response"
 	            },
-	            "full_path": "/var/ossec/etc/ossec_decoders/active-response_decoders.xml",
+	            "full_path": "/var/ossec/etc/decoders/active-response_decoders.xml",
 	            "file": "active-response_decoders.xml",
 	            "name": "ar_log"
 	         },
@@ -491,16 +481,16 @@ Returns all decoders included in ossec.conf.
 	               "type": "firewall",
 	               "order": "action,srcip,dstip,protocol,srcport,dstport"
 	            },
-	            "full_path": "/var/ossec/etc/ossec_decoders/aix-ipsec_decoders.xml",
+	            "full_path": "/var/ossec/etc/decoders/aix-ipsec_decoders.xml",
 	            "file": "aix-ipsec_decoders.xml",
 	            "name": "aix-ipsec"
 	         }
 	      ]
 	   }
 	}
+	
 
-
-Get all decoders files.
+Get all decoders files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Returns all decoders files included in ossec.conf.
 
@@ -535,22 +525,22 @@ Returns all decoders files included in ossec.conf.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 73,
+	      "totalItems": 78,
 	      "items": [
-	         "/var/ossec/etc/wazuh_decoders/serv-u_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/redis_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/puppet_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/ossec_ruleset_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/oscap_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/netscaler_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/hp_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/fortigate_decoders.xml",
-	         "/var/ossec/etc/wazuh_decoders/amazon_decoders.xml",
-	         "/var/ossec/etc/ossec_decoders/zeus_decoders.xml"
+	         "/var/ossec/etc/local_decoder.xml",
+	         "/var/ossec/etc/decoders/zeus_decoders.xml",
+	         "/var/ossec/etc/decoders/wordpress_decoders.xml",
+	         "/var/ossec/etc/decoders/windows_decoders.xml",
+	         "/var/ossec/etc/decoders/web-accesslog_decoders.xml",
+	         "/var/ossec/etc/decoders/vsftpd_decoders.xml",
+	         "/var/ossec/etc/decoders/vpopmail_decoders.xml",
+	         "/var/ossec/etc/decoders/vmware_decoders.xml",
+	         "/var/ossec/etc/decoders/vm-pop3_decoders.xml",
+	         "/var/ossec/etc/decoders/unix_chkpwd_decoders.xml"
 	      ]
 	   }
 	}
-
+	
 
 Get all parent decoders
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -587,7 +577,7 @@ Returns all parent decoders included in ossec.conf
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 104,
+	      "totalItems": 110,
 	      "items": [
 	         {
 	            "position": 0,
@@ -596,7 +586,7 @@ Returns all parent decoders included in ossec.conf
 	               "order": "srcip",
 	               "prematch": "^[\\d\\d/\\w\\w\\w/\\d\\d\\d\\d:\\d\\d:\\d\\d:\\d\\d \\S+] "
 	            },
-	            "full_path": "/var/ossec/etc/ossec_decoders/zeus_decoders.xml",
+	            "full_path": "/var/ossec/etc/decoders/zeus_decoders.xml",
 	            "file": "zeus_decoders.xml",
 	            "name": "zeus"
 	         },
@@ -608,14 +598,14 @@ Returns all parent decoders included in ossec.conf
 	               "order": "srcip",
 	               "prematch": "^["
 	            },
-	            "full_path": "/var/ossec/etc/ossec_decoders/wordpress_decoders.xml",
+	            "full_path": "/var/ossec/etc/decoders/wordpress_decoders.xml",
 	            "file": "wordpress_decoders.xml",
 	            "name": "wordpress"
 	         }
 	      ]
 	   }
 	}
-
+	
 
 Get decoders by name
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -661,7 +651,7 @@ Returns the decoders with the specified name.
 	            "details": {
 	               "program_name": "^httpd"
 	            },
-	            "full_path": "/var/ossec/etc/ossec_decoders/apache_decoders.xml",
+	            "full_path": "/var/ossec/etc/decoders/apache_decoders.xml",
 	            "file": "apache_decoders.xml",
 	            "name": "apache-errorlog"
 	         },
@@ -670,7 +660,7 @@ Returns the decoders with the specified name.
 	            "details": {
 	               "prematch": "^[warn] |^[notice] |^[error] "
 	            },
-	            "full_path": "/var/ossec/etc/ossec_decoders/apache_decoders.xml",
+	            "full_path": "/var/ossec/etc/decoders/apache_decoders.xml",
 	            "file": "apache_decoders.xml",
 	            "name": "apache-errorlog"
 	         },
@@ -679,194 +669,19 @@ Returns the decoders with the specified name.
 	            "details": {
 	               "prematch": "^[\\w+ \\w+ \\d+ \\d+:\\d+:\\d+.\\d+ \\d+] [\\S+:warn] |^[\\w+ \\w+ \\d+ \\d+:\\d+:\\d+.\\d+ \\d+] [\\S+:notice] |^[\\w+ \\w+ \\d+ \\d+:\\d+:\\d+.\\d+ \\d+] [\\S*:error] |^[\\w+ \\w+ \\d+ \\d+:\\d+:\\d+.\\d+ \\d+] [\\S+:info] "
 	            },
-	            "full_path": "/var/ossec/etc/ossec_decoders/apache_decoders.xml",
+	            "full_path": "/var/ossec/etc/decoders/apache_decoders.xml",
 	            "file": "apache_decoders.xml",
 	            "name": "apache-errorlog"
 	         }
 	      ]
 	   }
 	}
-
+	
 
 
 
 Manager
 ----------------------------------------
-Actions
-++++++++++++++++++++++++++++++++++++++++
-
-Restart manager
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Restarts the OSSEC Manager processes.
-
-**Request**:
-
-``PUT`` ::
-
-	/manager/restart
-
-**Example Request:**
-::
-
-	curl -u foo:bar -k -X PUT "https://127.0.0.1:55000/manager/restart?pretty"
-
-**Example Response:**
-::
-
-	{
-	   "error": 0,
-	   "data": [
-	      {
-	         "status": "running",
-	         "daemon": "wazuh-moduled"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-maild"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-execd"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-analysisd"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-logcollector"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-remoted"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-syscheckd"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-monitord"
-	      }
-	   ]
-	}
-
-
-Start manager
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Starts the OSSEC Manager processes.
-
-**Request**:
-
-``PUT`` ::
-
-	/manager/start
-
-**Example Request:**
-::
-
-	curl -u foo:bar -k -X PUT "https://127.0.0.1:55000/manager/start?pretty"
-
-**Example Response:**
-::
-
-	{
-	   "error": 0,
-	   "data": [
-	      {
-	         "status": "running",
-	         "daemon": "wazuh-moduled"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-maild"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-execd"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-analysisd"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-logcollector"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-remoted"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-syscheckd"
-	      },
-	      {
-	         "status": "running",
-	         "daemon": "ossec-monitord"
-	      }
-	   ]
-	}
-
-
-Stop manager
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Stops the OSSEC Manager processes.
-
-**Request**:
-
-``PUT`` ::
-
-	/manager/stop
-
-**Example Request:**
-::
-
-	curl -u foo:bar -k -X PUT "https://127.0.0.1:55000/manager/stop?pretty"
-
-**Example Response:**
-::
-
-	{
-	   "error": 0,
-	   "data": [
-	      {
-	         "status": "killed",
-	         "daemon": "ossec-monitord"
-	      },
-	      {
-	         "status": "killed",
-	         "daemon": "ossec-logcollector"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-remoted"
-	      },
-	      {
-	         "status": "killed",
-	         "daemon": "ossec-syscheckd"
-	      },
-	      {
-	         "status": "killed",
-	         "daemon": "ossec-analysisd"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-maild"
-	      },
-	      {
-	         "status": "killed",
-	         "daemon": "ossec-execd"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "wazuh-moduled"
-	      }
-	   ]
-	}
-
-
-
 Configuration
 ++++++++++++++++++++++++++++++++++++++++
 
@@ -907,35 +722,10 @@ Returns ossec.conf in JSON format.
 	         "^localhost.localdomain$",
 	         "10.0.0.2"
 	      ],
-	      "jsonout_output": "yes",
-	      "logall": "yes"
+	      "jsonout_output": "yes"
 	   }
 	}
-
-
-Test manager configuration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Checks OSSEC Manager configuration.
-
-**Request**:
-
-``PUT`` ::
-
-	/manager/configuration/test
-
-**Example Request:**
-::
-
-	curl -u foo:bar -k -X PUT "https://127.0.0.1:55000/manager/configuration/test?pretty"
-
-**Example Response:**
-::
-
-	{
-	   "error": 0,
-	   "data": "OK"
-	}
-
+	
 
 
 Info
@@ -962,13 +752,15 @@ Returns basic information about Manager.
 	{
 	   "error": 0,
 	   "data": {
+	      "openssl_support": "yes",
+	      "installation_date": "Thu Sep 22 16:14:51 UTC 2016",
+	      "version": "v1.2",
+	      "max_agents": "2048",
 	      "path": "/var/ossec",
-	      "installation_date": "Tue Jul 19 10:54:30 UTC 2016",
-	      "version": "v1.2-alpha1",
 	      "type": "server"
 	   }
 	}
-
+	
 
 Get manager status
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -990,42 +782,19 @@ Returns the Manager processes that are running.
 
 	{
 	   "error": 0,
-	   "data": [
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-monitord"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-logcollector"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-remoted"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-syscheckd"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-analysisd"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-maild"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "ossec-execd"
-	      },
-	      {
-	         "status": "stopped",
-	         "daemon": "wazuh-moduled"
-	      }
-	   ]
+	   "data": {
+	      "wazuh-moduled": "stopped",
+	      "ossec-authd": "stopped",
+	      "ossec-monitord": "running",
+	      "ossec-logcollector": "running",
+	      "ossec-execd": "running",
+	      "ossec-remoted": "running",
+	      "ossec-syscheckd": "running",
+	      "ossec-analysisd": "running",
+	      "ossec-maild": "stopped"
+	   }
 	}
-
+	
 
 
 Logs
@@ -1075,15 +844,15 @@ Returns the 3 last months of ossec.log.
 
 	{
 	    "data": {
-	        "totalItems": 16480,
+	        "totalItems": 16480, 
 	        "items": [
-	            "2016/07/15 09:33:49 ossec-syscheckd: INFO: Syscheck scan frequency: 3600 seconds",
-	            "2016/07/15 09:33:49 ossec-syscheckd: INFO: Starting syscheck scan (forwarding database).",
-	            "2016/07/15 09:33:49 ossec-syscheckd: INFO: Starting syscheck database (pre-scan).",
-	            "2016/07/15 09:33:42 ossec-logcollector: INFO: Started (pid: 2832).",
+	            "2016/07/15 09:33:49 ossec-syscheckd: INFO: Syscheck scan frequency: 3600 seconds", 
+	            "2016/07/15 09:33:49 ossec-syscheckd: INFO: Starting syscheck scan (forwarding database).", 
+	            "2016/07/15 09:33:49 ossec-syscheckd: INFO: Starting syscheck database (pre-scan).", 
+	            "2016/07/15 09:33:42 ossec-logcollector: INFO: Started (pid: 2832).", 
 	            "2016/07/15 09:33:42 ossec-logcollector: INFO: Monitoring output of command(360): df -P"
 	        ]
-	    },
+	    }, 
 	    "error": 0
 	}
 
@@ -1109,178 +878,58 @@ Returns a summary about the 3 last months of ossec.log.
 	   "error": 0,
 	   "data": {
 	      "ossec-testrule": {
-	         "info": 1314,
-	         "all": 1314,
+	         "info": 858,
+	         "all": 858,
 	         "error": 0
 	      },
 	      "wazuh-moduled": {
-	         "info": 17,
-	         "all": 17,
+	         "info": 11,
+	         "all": 11,
 	         "error": 0
 	      },
 	      "ossec-rootcheck": {
-	         "info": 36,
-	         "all": 36,
+	         "info": 43,
+	         "all": 43,
 	         "error": 0
 	      },
 	      "ossec-monitord": {
-	         "info": 32,
-	         "all": 32,
-	         "error": 0
+	         "info": 38,
+	         "all": 40,
+	         "error": 2
 	      },
 	      "ossec-logcollector": {
-	         "info": 151,
-	         "all": 166,
-	         "error": 15
+	         "info": 131,
+	         "all": 153,
+	         "error": 22
 	      },
 	      "ossec-execd": {
-	         "info": 48,
-	         "all": 48,
+	         "info": 31,
+	         "all": 31,
 	         "error": 0
 	      },
 	      "ossec-remoted": {
-	         "info": 111,
-	         "all": 131,
-	         "error": 20
+	         "info": 82,
+	         "all": 99,
+	         "error": 17
 	      },
 	      "ossec-syscheckd": {
-	         "info": 123,
-	         "all": 124,
-	         "error": 1
+	         "info": 134,
+	         "all": 134,
+	         "error": 0
 	      },
 	      "ossec-analysisd": {
-	         "info": 2541,
-	         "all": 2541,
+	         "info": 1905,
+	         "all": 1905,
 	         "error": 0
 	      },
 	      "ossec-maild": {
-	         "info": 17,
-	         "all": 17,
+	         "info": 11,
+	         "all": 11,
 	         "error": 0
 	      }
 	   }
 	}
-
-
-
-Ruleset
-++++++++++++++++++++++++++++++++++++++++
-
-Get ruleset backups
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Returns the ruleset backup list created by ossec_ruleset.py.
-
-**Request**:
-
-``GET`` ::
-
-	/manager/update-ruleset/backups
-
-**Example Request:**
-::
-
-	curl -u foo:bar -k -X GET "https://127.0.0.1:55000/manager/update-ruleset/backups?pretty"
-
-**Example Response:**
-::
-
-	{
-	    "data": [
-	        "20160713_005",
-	        "20160713_004",
-	        "20160713_003",
-	        "20160713_002",
-	        "20160713_001"
-	    ],
-	    "error": 0
-	}
-
-Restore rulset backup
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Restores a ruleset backup.
-
-**Request**:
-
-``PUT`` ::
-
-	/manager/update-ruleset/backups/:id
-
-**Parameters:**
-
-+--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Param              | Type          | Description                                                                                                                                                                                            |
-+====================+===============+========================================================================================================================================================================================================+
-| ``id``             | string        | Backup id.                                                                                                                                                                                             |
-+--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-**Example Request:**
-::
-
-	curl -u foo:bar -k -X PUT "https://127.0.0.1:55000/manager/update-ruleset/backups/20160711_002?pretty"
-
-**Example Response:**
-::
-
-	{
-	    "data": {
-	        "msg": "Backup successfully",
-	        "restart_status": "success",
-	        "need_restart": "yes",
-	        "manual_steps": "no",
-	        "restarted": "yes"
-	    },
-	    "error": 0
-	}
-
-Update ruleset
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-Update OSSEC ruleset. If the update change a file in use, OSSEC will be restarted.
-
-**Request**:
-
-``PUT`` ::
-
-	/manager/update-ruleset
-
-**Parameters:**
-
-+--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Param              | Type          | Description                                                                                                                                                                                            |
-+====================+===============+========================================================================================================================================================================================================+
-| type               | string        | Selects ruleset to install.                                                                                                                                                                            |
-|                    |               |                                                                                                                                                                                                        |
-|                    |               | Allowed values:                                                                                                                                                                                        |
-|                    |               |                                                                                                                                                                                                        |
-|                    |               | - both                                                                                                                                                                                                 |
-|                    |               | - rules                                                                                                                                                                                                |
-|                    |               | - rootchecks                                                                                                                                                                                           |
-+--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| force              | string        | Overwrites all ruleset. OSSEC will be restarted.                                                                                                                                                       |
-|                    |               |                                                                                                                                                                                                        |
-|                    |               | Allowed values:                                                                                                                                                                                        |
-|                    |               |                                                                                                                                                                                                        |
-|                    |               | - yes                                                                                                                                                                                                  |
-|                    |               | - no                                                                                                                                                                                                   |
-+--------------------+---------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-
-**Example Request:**
-::
-
-	curl -u foo:bar -k -X PUT "https://127.0.0.1:55000/manager/update-ruleset?pretty"
-
-**Example Response:**
-::
-
-	{
-	    "data": {
-	        "msg": "Ruleset(1.09) updated successfully",
-	        "restart_status": "success",
-	        "need_restart": "yes",
-	        "manual_steps": "no",
-	        "restarted": "yes"
-	    },
-	    "error": 0
-	}
+	
 
 
 Stats
@@ -1315,31 +964,31 @@ Returns OSSEC statistical information of current date.
 	{
 	    "data": [
 	        {
-	            "hour": 5,
-	            "firewall": 0,
+	            "hour": 5, 
+	            "firewall": 0, 
 	            "alerts": [
 	                {
-	                    "level": 3,
-	                    "sigid": 5715,
+	                    "level": 3, 
+	                    "sigid": 5715, 
 	                    "times": 4
-	                },
+	                }, 
 	                {
-	                    "level": 2,
-	                    "sigid": 1002,
+	                    "level": 2, 
+	                    "sigid": 1002, 
 	                    "times": 2
-	                },
+	                }, 
 	                {
 	                    "...": "..."
 	                }
-	            ],
-	            "totalAlerts": 107,
-	            "syscheck": 1257,
+	            ], 
+	            "totalAlerts": 107, 
+	            "syscheck": 1257, 
 	            "events": 1483
-	        },
+	        }, 
 	        {
 	            "...": "..."
 	        }
-	    ],
+	    ], 
 	    "error": 0
 	}
 
@@ -1364,16 +1013,16 @@ Returns OSSEC statistical information per hour. Each item in averages field repr
 	{
 	    "data": {
 	        "averages": [
-	            100,
-	            357,
-	            242,
-	            500,
-	            422,
-	            "...",
+	            100, 
+	            357, 
+	            242, 
+	            500, 
+	            422, 
+	            "...", 
 	            123
-	        ],
+	        ], 
 	        "interactions": 0
-	    },
+	    }, 
 	    "error": 0
 	}
 
@@ -1399,61 +1048,61 @@ Returns OSSEC statistical information per week. Each item in hours field represe
 	    "data": {
 	        "Wed": {
 	            "hours": [
-	                223,
-	                "...",
+	                223, 
+	                "...", 
 	                456
-	            ],
+	            ], 
 	            "interactions": 0
-	        },
+	        }, 
 	        "Sun": {
 	            "hours": [
-	                332,
-	                "...",
+	                332, 
+	                "...", 
 	                313
-	            ],
+	            ], 
 	            "interactions": 0
-	        },
+	        }, 
 	        "Thu": {
 	            "hours": [
-	                888,
-	                "...",
+	                888, 
+	                "...", 
 	                123
-	            ],
+	            ], 
 	            "interactions": 0
-	        },
+	        }, 
 	        "Tue": {
 	            "hours": [
-	                536,
-	                "...",
+	                536, 
+	                "...", 
 	                345
-	            ],
+	            ], 
 	            "interactions": 0
-	        },
+	        }, 
 	        "Mon": {
 	            "hours": [
-	                444,
-	                "...",
+	                444, 
+	                "...", 
 	                556
-	            ],
+	            ], 
 	            "interactions": 0
-	        },
+	        }, 
 	        "Fri": {
 	            "hours": [
-	                131,
-	                "...",
+	                131, 
+	                "...", 
 	                432
-	            ],
+	            ], 
 	            "interactions": 0
-	        },
+	        }, 
 	        "Sat": {
 	            "hours": [
-	                134,
-	                "...",
+	                134, 
+	                "...", 
 	                995
-	            ],
+	            ], 
 	            "interactions": 0
 	        }
-	    },
+	    }, 
 	    "error": 0
 	}
 
@@ -1483,7 +1132,7 @@ Clears the rootcheck database for all agents.
 ::
 
 	{
-	    "data": "Policy and auditing database updated",
+	    "data": "Rootcheck database deleted", 
 	    "error": 0
 	}
 
@@ -1514,7 +1163,7 @@ Clears the rootcheck database for an agent.
 ::
 
 	{
-	    "data": "Policy and auditing database updated",
+	    "data": "Rootcheck database deleted", 
 	    "error": 0
 	}
 
@@ -1551,11 +1200,11 @@ Return the timestamp of the last rootcheck scan.
 	{
 	   "error": 0,
 	   "data": {
-	      "rootcheckEndTime": "Unknown",
-	      "rootcheckTime": "Unknown"
+	      "rootcheckEndTime": "2016-09-23 16:08:10",
+	      "rootcheckTime": "2016-09-23 16:02:58"
 	   }
 	}
-
+	
 
 Get rootcheck CIS requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1584,16 +1233,22 @@ Returns the CIS requirements of all rootchecks of the agent.
 **Example Request:**
 ::
 
-	curl -u foo:bar -k -X GET "https://127.0.0.1:55000/rootchecks/:agent_id/cis?offset=0&limit=10&pretty"
+	curl -u foo:bar -k -X GET "https://127.0.0.1:55000/rootcheck/000/cis?offset=0&limit=10&pretty"
 
 **Example Response:**
 ::
 
 	{
-	   "error": 603,
-	   "message": "The requested URL was not found on this server"
+	   "error": 0,
+	   "data": {
+	      "totalItems": 2,
+	      "items": [
+	         "1.4 Debian Linux",
+	         "4.13 Debian Linux"
+	      ]
+	   }
 	}
-
+	
 
 Get rootcheck database
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1636,11 +1291,24 @@ Returns the rootcheck database of an agent.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 0,
-	      "items": []
+	      "totalItems": 12,
+	      "items": [
+	         {
+	            "status": "outstanding",
+	            "oldDay": "2016-09-23 16:03:00",
+	            "readDay": "2016-09-23 17:06:05",
+	            "event": "File '/usr/local/lib/python3.4/dist-packages/xmljson-0.1.6-py3.4.egg/EGG-INFO/PKG-INFO' is owned by root and has written permissions to anyone."
+	         },
+	         {
+	            "status": "outstanding",
+	            "oldDay": "2016-09-23 16:03:00",
+	            "readDay": "2016-09-23 17:06:05",
+	            "event": "File '/usr/local/lib/python3.4/dist-packages/xmljson-0.1.6-py3.4.egg/EGG-INFO/SOURCES.txt' is owned by root and has written permissions to anyone."
+	         }
+	      ]
 	   }
 	}
-
+	
 
 Get rootcheck pci requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1669,16 +1337,21 @@ Returns the PCI requirements of all rootchecks of the agent.
 **Example Request:**
 ::
 
-	curl -u foo:bar -k -X GET "https://127.0.0.1:55000/rootchecks/000/pci?offset=0&limit=10&pretty"
+	curl -u foo:bar -k -X GET "https://127.0.0.1:55000/rootcheck/000/pci?offset=0&limit=10&pretty"
 
 **Example Response:**
 ::
 
 	{
-	   "error": 603,
-	   "message": "The requested URL was not found on this server"
+	   "error": 0,
+	   "data": {
+	      "totalItems": 1,
+	      "items": [
+	         "2.2.2"
+	      ]
+	   }
 	}
-
+	
 
 
 Run
@@ -1703,7 +1376,7 @@ Runs syscheck and rootcheck on all agent, due to OSSEC launches both processes a
 ::
 
 	{
-	    "data": "Restarting Syscheck/Rootcheck on all agents",
+	    "data": "Restarting Syscheck/Rootcheck on all agents", 
 	    "error": 0
 	}
 
@@ -1737,7 +1410,7 @@ Runs syscheck and rootcheck on an agent, due to OSSEC launches both processes at
 	   "error": 0,
 	   "data": "Restarting Syscheck/Rootcheck locally"
 	}
-
+	
 
 
 
@@ -1797,7 +1470,7 @@ Returns all rules.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 1586,
+	      "totalItems": 1621,
 	      "items": [
 	         {
 	            "status": "enabled",
@@ -1832,7 +1505,7 @@ Returns all rules.
 	      ]
 	   }
 	}
-
+	
 
 Get files of rules
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1877,7 +1550,7 @@ Returns the files of all rules.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 80,
+	      "totalItems": 85,
 	      "items": [
 	         {
 	            "status": "enabled",
@@ -1922,7 +1595,7 @@ Returns the files of all rules.
 	      ]
 	   }
 	}
-
+	
 
 Get rule groups
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1959,22 +1632,22 @@ Returns the groups of all rules.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 86,
+	      "totalItems": 188,
 	      "items": [
+	         "Amazon-vpc",
 	         "access_control",
 	         "access_denied",
+	         "accesslog",
 	         "account_changed",
 	         "active_response",
 	         "adduser",
+	         "agent",
 	         "agentless",
-	         "arpwatch",
-	         "asterisk",
-	         "attacks",
-	         "authentication_failed"
+	         "amazon"
 	      ]
 	   }
 	}
-
+	
 
 Get rule pci requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2011,22 +1684,22 @@ Returns the PCI requirements of all rules.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 22,
+	      "totalItems": 38,
 	      "items": [
 	         "1.1.1",
 	         "1.3.4",
 	         "1.4",
 	         "10.1",
+	         "10.2.1",
 	         "10.2.2",
 	         "10.2.4",
 	         "10.2.5",
 	         "10.2.6",
-	         "10.2.7",
-	         "10.4"
+	         "10.2.7"
 	      ]
 	   }
 	}
-
+	
 
 Get rules by id
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2086,7 +1759,7 @@ Returns the rules with the specified id.
 	      ]
 	   }
 	}
-
+	
 
 
 
@@ -2114,7 +1787,7 @@ Clears the syscheck database for all agents.
 ::
 
 	{
-	    "data": "Integrity check database updated",
+	    "data": "Syscheck database deleted", 
 	    "error": 0
 	}
 
@@ -2145,7 +1818,7 @@ Clears the syscheck database for an agent.
 ::
 
 	{
-	    "data": "Integrity check database updated",
+	    "data": "Syscheck database deleted", 
 	    "error": 0
 	}
 
@@ -2182,11 +1855,11 @@ Return the timestamp of the last syscheck scan.
 	{
 	   "error": 0,
 	   "data": {
-	      "syscheckTime": "Unknown",
-	      "syscheckEndTime": "Unknown"
+	      "syscheckTime": "2016-09-23 16:02:48",
+	      "syscheckEndTime": "2016-09-23 16:02:58"
 	   }
 	}
-
+	
 
 Get syscheck files
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2196,7 +1869,7 @@ Returns the syscheck files of an agent.
 
 ``GET`` ::
 
-	/syscheck/:agent_id/files
+	/syscheck/:agent_id
 
 **Parameters:**
 
@@ -2248,7 +1921,7 @@ Returns the syscheck files of an agent.
 **Example Request:**
 ::
 
-	curl -u foo:bar -k -X GET "https://127.0.0.1:55000/syscheck/000/files?offset=0&limit=2&pretty"
+	curl -u foo:bar -k -X GET "https://127.0.0.1:55000/syscheck/000?offset=0&limit=2&pretty"
 
 **Example Response:**
 ::
@@ -2256,44 +1929,44 @@ Returns the syscheck files of an agent.
 	{
 	   "error": 0,
 	   "data": {
-	      "totalItems": 6246,
+	      "totalItems": 129,
 	      "items": [
 	         {
-	            "uid": 0,
-	            "scanDate": "2016-07-19 11:02:35",
-	            "user": "root",
-	            "file": "/home/test/a.txt",
-	            "modificationDate": "2016-07-13 14:21:29",
-	            "octalMode": "100644",
-	            "inode": 269916,
-	            "event": "added",
-	            "size": 6,
-	            "sha1": "c73b06f6f64e963128866347ed780f6b1eb02b84",
+	            "sha1": "d960e2fb6c2ff88f48825164ce1aba104b7740fd",
 	            "group": "root",
+	            "uid": 0,
+	            "scanDate": "2016-09-23 16:02:54",
 	            "gid": 0,
-	            "permissions": "-rw-r--r--",
-	            "md5": "b57790683a93ab0834e9cc9b37d0f3ff"
+	            "user": "root",
+	            "file": "/usr/sbin/a2disconf",
+	            "modificationDate": "2016-07-20 06:48:42",
+	            "octalMode": "120777",
+	            "permissions": "lrwxrwxrwx",
+	            "md5": "f5dacb6a9a342760e710fac300bbe0e5",
+	            "inode": 42785,
+	            "event": "added",
+	            "size": 7
 	         },
 	         {
-	            "uid": 0,
-	            "scanDate": "2016-07-19 11:02:35",
-	            "user": "root",
-	            "file": "/home/test/b.txt",
-	            "modificationDate": "2016-07-13 13:57:11",
-	            "octalMode": "100644",
-	            "inode": 269934,
-	            "event": "added",
-	            "size": 2,
-	            "sha1": "3f786850e387550fdab836ed7e6dc881de23001b",
+	            "sha1": "a47104d4d0ff17d69e41d7ea23c2a298b5c9a3b8",
 	            "group": "root",
+	            "uid": 0,
+	            "scanDate": "2016-09-23 16:02:54",
 	            "gid": 0,
-	            "permissions": "-rw-r--r--",
-	            "md5": "60b725f10c9c85c70d97880dfe8191b3"
+	            "user": "root",
+	            "file": "/usr/sbin/arp",
+	            "modificationDate": "2014-11-08 18:09:08",
+	            "octalMode": "100755",
+	            "permissions": "-rwxr-xr-x",
+	            "md5": "51656b623bff69c1b4d9fcb29f64a33e",
+	            "inode": 7775,
+	            "event": "added",
+	            "size": 55688
 	         }
 	      ]
 	   }
 	}
-
+	
 
 
 Run
@@ -2318,7 +1991,7 @@ Runs syscheck and rootcheck on all agent, due to OSSEC launches both processes a
 ::
 
 	{
-	    "data": "Restarting Syscheck/Rootcheck on all agents",
+	    "data": "Restarting Syscheck/Rootcheck on all agents", 
 	    "error": 0
 	}
 
@@ -2352,3 +2025,7 @@ Runs syscheck and rootcheck on an agent, due to OSSEC launches both processes at
 	   "error": 0,
 	   "data": "Restarting Syscheck/Rootcheck locally"
 	}
+	
+
+
+
