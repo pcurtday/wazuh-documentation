@@ -62,7 +62,7 @@ Usually a policy consists of different files:
  - **CPE (Common Platform Enumeration)**: It serves to identify IT platforms and systems using unequivocally defined names.
  - **DataStream** (files names end with **-ds.xml**): It is a format that packs other SCAP components into a single file.
 
-The wodle parses the XCCDF or DataStream policies. Remember that if you use a XCCDF policy that references to an OVAL file, the OVAL file must be in the same directory as the XCCDF file. We strongly recommend using DataStream files because they are easier to use. Here you will find more information about `SCAP components <https://www.open-scap.org/features/scap-components/>`_.
+The wodle parses the OVAL, XCCDF or DataStream policies. Remember that if you use a XCCDF policy that references to an OVAL file, the OVAL file must be in the same directory as the XCCDF file. We strongly recommend using DataStream files because they are easier to use. Here you will find more information about `SCAP components <https://www.open-scap.org/features/scap-components/>`_.
 
 Available policies:
 
@@ -99,53 +99,48 @@ First, specify the wodle name: ::
 Now, use the proper tags to define the OpenSCAP evaluations: ::
 
     <wodle name="open-scap">
-        <interval>1d</interval>
 
-        <eval policy="ssg-centos7-ds.xml" timeout="300">
+        <content type="xccdf" path="ssg-centos7-ds.xml">
             <profile>xccdf_org.ssgproject.content_profile_pci-dss</profile>
-        </eval>
+        </content>
 
     </wodle>
 
 These are the available tags:
 
-=========================  ==============
- Tag                        Description
-=========================  ==============
-``timeout``                 Timeout for each evaluation (in seconds). Default value: 300 seconds (5 minutes).
-``interval``                Space of time between OpenSCAP executions (in seconds). It can contain a prefix character: s (seconds), m (minutes), h (hours), d (days). Default value: 1d (one day).
-``scan-on-start``           Run evaluation when on service start without waiting for interval. Values: yes, no. Default: yes.
-``skip-result``             Do not read results with the specified result value. Values: pass, fail, notchecked, notapplicable, fixed, informational, error, unknown, notselected. Default: pass, notchecked, notapplicable, notselected.
-``skip-severity``           Do not read results with the specified severity value. Values: low, medium, high.
-``eval``                    Define an evaluation.
-``eval:policy``             Use the specified policy (DataStream or XCCDF).
-``eval:timeout``            Timeout for the evaluation (in seconds). It overwrites generic timeout.
-``eval->xccdf-id``          XCCDF id.
-``eval->datastream-id``     Datastream id.
-``eval->cpe``               CPE dictionary file. Default path: /var/ossec/wodles/oscap/policies
-``eval->profile``           Select profile.
-``eval->skip-result``       skip-result for the scan. It overwrites generic skip-result.
-``eval->skip-severity``     skip-severity for the scan. It overwrites generic skip-severity.
-=========================  ==============
+==========================  ==============
+ Tag                         Description
+==========================  ==============
+``timeout``                  Timeout for each evaluation (in seconds). Default value: 600 seconds (10 minutes).
+``interval``                 Space of time between OpenSCAP executions (in seconds). It can contain a prefix character: s (seconds), m (minutes), h (hours), d (days). Default value: 1d (one day).
+``scan-on-start``            Run evaluation when on service start without waiting for interval. Values: yes, no. Default: yes.
+``content``                  Define an evaluation.
+``content:type``             Select content type: xccdf or oval.
+``content:path``             Use the specified policy file (DataStream, XCCDF or OVAL).
+``content->timeout``         Timeout for the evaluation (in seconds). It overwrites generic timeout.
+``content->xccdf-id``        XCCDF id.
+``content->oval-id``         OVAL id.
+``content->datastream-id``   Datastream id.
+``content->cpe``             CPE dictionary file. Default path: /var/ossec/wodles/oscap/policies
+``content->profile``         Select profile.
+==========================  ==============
 
 
 Basic configuration
 ++++++++++++++++++++++++++++++++++++++++++++
 
-In this example, we configure OSSEC to run OpenSCAP each day. Each evaluation has a timeout of 300 seconds. We do not receive results with *notchecked*, *notapplicable*, *notselected* or *pass* status or with *low* severity. The policies to evalute are for Centos 6 and 7.
+In this example, we configure OSSEC to run OpenSCAP each day. Each evaluation has a timeout of 600 seconds.
 
 ::
 
     <wodle name="open-scap">
 
-        <timeout>300</timeout>
+        <timeout>600</timeout>
         <interval>1d</interval>
         <scan-on-start>yes</scan-on-start>
-        <skip-result>pass,notchecked,notapplicable,notselected</skip-result>
-        <skip-severity>low</skip-severity>
 
-        <eval policy="ssg-centos7-ds.xml"/>
-        <eval policy="ssg-centos6-ds.xml"/>
+        <content type="xccdf" path="ssg-centos7-ds.xml"/>
+        <content type="xccdf" path="ssg-centos6-ds.xml"/>
 
     </wodle>
 
@@ -158,9 +153,11 @@ It is possible to overwrite the timeout for a specific evaluation: ::
 
         <timeout>600</timeout>
 
-        <eval policy="ssg-centos7-ds.xml" timeout="120"/>
+        <content type="xccdf" path="ssg-centos7-ds.xml">
+            <timeout>120</timeout>
+        </content>
 
-        <eval policy="ssg-centos6-ds.xml"/>
+        <content type="xccdf" path="ssg-centos6-ds.xml"/>
 
     </wodle>
 
@@ -170,39 +167,12 @@ We can evaluate only specific profiles of a policy: ::
 
     <wodle name="open-scap">
 
-        <eval policy="ssg-centos7-ds.xml">
+        <content type="xccdf" path="ssg-centos7-ds.xml">
             <profile>xccdf_org.ssgproject.content_profile_standard</profile>
             <profile>xccdf_org.ssgproject.content_profile_pci-dss</profile>
-        </eval>
+        </content>
 
-        <eval policy="ssg-centos6-ds.xml"/>
-
-    </wodle>
-
-Skips
-++++++++++++++++++++++++++++++++++++++++++++
-
-In this example, we skip the results with *low* severity and with *notchecked*, *notapplicable*, *notselected* status, but in case of the CentOS 7 policy we want to skip the results with *low* and *medium* severity. However, for the Centos 6 policy we do not want to skip any result. Finally, for the CentOS 5 policy, we skip the results with *low* severity but we also want to skip the result with *pass* status.
-
-::
-
-    <wodle name="open-scap">
-
-        <skip-result>notchecked,notapplicable,notselected</skip-result>
-        <skip-severity>low</skip-severity>
-
-        <eval policy="ssg-centos7-ds.xml">
-            <skip-severity>low,medium</skip-result>
-        </eval>
-
-        <eval policy="ssg-centos6-ds.xml">
-            <skip-result></skip-result>
-            <skip-severity></skip-severity>
-        </eval>
-
-        <eval policy="ssg-centos5-ds.xml">
-            <skip-result>notchecked,notapplicable,notselected,pass</skip-result>
-        <eval/>
+        <content type="xccdf" path="ssg-centos6-ds.xml"/>
 
     </wodle>
 
@@ -213,11 +183,11 @@ If necessary, you can also specify the CPE file. ::
 
     <wodle name="open-scap">
 
-        <eval policy="ssg-centos7-ds.xml">
+        <content type="xccdf" path=policy="ssg-centos7-ds.xml">
             <cpe>file.xml</cpe>
-        </eval>
+        </content>
 
-        <eval policy="ssg-centos6-ds.xml" />
+        <content type="xccdf" path="ssg-centos6-ds.xml" />
 
     </wodle>
 
@@ -227,12 +197,12 @@ You can select a specific ID of the datastream file:  ::
 
     <wodle name="open-scap">
 
-        <eval policy="ssg-centos7-ds.xml">
+        <content type="xccdf" path="ssg-centos7-ds.xml">
             <datastream-id>id</datastream-id>
             <xccdf-id>id</xccdf-id>
-        </eval>
+        </content>
 
-        <eval policy="ssg-centos6-ds.xml" />
+        <content type="xccdf" path="ssg-centos6-ds.xml" />
 
     </wodle>
 
@@ -296,9 +266,9 @@ Manager ``shared/agent.conf``:
   <agent_config profile="redhat7">
 
     <wodle name="open-scap">
-      <eval policy="ssg-rhel7-ds.xml">
+      <content type="xccdf" path="ssg-rhel7-ds.xml">
         <profile>xccdf_org.ssgproject.content_profile_pci-dss</profile>
-      </eval>
+      </content>
     </wodle>
 
   </agent_config>
@@ -384,7 +354,7 @@ Manager ``shared/agent.conf``:
   <agent_config profile="redhat7">
 
     <wodle name="open-scap">
-      <eval policy="com.redhat.rhsa-RHEL7.ds.xml"/>
+      <content type="xccdf" path="com.redhat.rhsa-RHEL7.ds.xml"/>
     </wodle>
 
   </agent_config>
