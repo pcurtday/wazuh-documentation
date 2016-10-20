@@ -111,13 +111,13 @@ These are the available tags:
 ==========================  ==============
  Tag                         Description
 ==========================  ==============
-``timeout``                  Timeout for each evaluation (in seconds). Default value: 600 seconds (10 minutes).
+``timeout``                  Timeout for each evaluation (in seconds). Default value: 1800 seconds (30 minutes).
 ``interval``                 Space of time between OpenSCAP executions (in seconds). It can contain a prefix character: s (seconds), m (minutes), h (hours), d (days). Default value: 1d (one day).
 ``scan-on-start``            Run evaluation when on service start without waiting for interval. Values: yes, no. Default: yes.
 ``content``                  Define an evaluation.
 ``content:type``             Select content type: xccdf or oval.
 ``content:path``             Use the specified policy file (DataStream, XCCDF or OVAL).
-``content->timeout``         Timeout for the evaluation (in seconds). It overwrites generic timeout.
+``content->timeout``         Timeout for the evaluation (in seconds). It overwrites the generic timeout.
 ``content->xccdf-id``        XCCDF id.
 ``content->oval-id``         OVAL id.
 ``content->datastream-id``   Datastream id.
@@ -129,13 +129,13 @@ These are the available tags:
 Basic configuration
 ++++++++++++++++++++++++++++++++++++++++++++
 
-In this example, we configure OSSEC to run OpenSCAP each day. Each evaluation has a timeout of 600 seconds.
+In this example, we configure OSSEC to run OpenSCAP each day. Each evaluation has a timeout of 30 minutes.
 
 ::
 
     <wodle name="open-scap">
 
-        <timeout>600</timeout>
+        <timeout>1800</timeout>
         <interval>1d</interval>
         <scan-on-start>yes</scan-on-start>
 
@@ -151,7 +151,7 @@ It is possible to overwrite the timeout for a specific evaluation: ::
 
     <wodle name="open-scap">
 
-        <timeout>600</timeout>
+        <timeout>1800</timeout>
 
         <content type="xccdf" path="ssg-centos7-ds.xml">
             <timeout>120</timeout>
