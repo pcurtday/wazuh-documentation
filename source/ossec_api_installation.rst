@@ -40,15 +40,15 @@ Red Hat, CentOS and Fedora: ::
 
 Other packages
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-You will need *htpasswd* to configure your user/password and *pip* to install the API:
+You will need *pip* to install the API:
 
 Debian and Ubuntu based Linux distributions: ::
 
-  sudo apt-get install -y python-pip apache2-utils
+  sudo apt-get install -y python-pip
 
 Red Hat, CentOS and Fedora: ::
 
-  sudo yum install -y python-pip httpd-tools
+  sudo yum install -y python-pip
 
 
 RESTful API
