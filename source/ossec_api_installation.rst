@@ -30,12 +30,12 @@ Usually, it is enough with the next commands:
 
 Debian and Ubuntu based Linux distributions: ::
 
- $ curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+ $ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
  $ sudo apt-get install -y nodejs
 
 Red Hat, CentOS and Fedora: ::
 
- $ curl --silent --location https://rpm.nodesource.com/setup_4.x | bash -
+ $ curl --silent --location https://rpm.nodesource.com/setup_6.x | bash -
  $ yum -y install nodejs
 
 Other packages
